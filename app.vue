@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { Content, fetchOneEntry, isPreviewing } from '@builder.io/sdk-vue';
+import { Content, fetchOneEntry, isPreviewing, getBuilderSearchParams } from '@builder.io/sdk-vue';
 
 import HelloWorldComponent from './components/HelloWorld.vue';
 import Tabs from './components/Tabs.vue';
@@ -210,6 +210,7 @@ const { data: content } = await useAsyncData('builderData', () =>
     userAttributes: {
       urlPath: route.path,
     },
+    options: getBuilderSearchParams(route.query),
   })
 );
 </script>
