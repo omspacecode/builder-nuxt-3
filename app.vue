@@ -7,11 +7,24 @@
         page title:
         {{ content?.data?.title || 'Unpublished' }}
       </div>
+
+      <!-- <label @click="activeComponent = CompA">
+        <input type="radio" v-model="activeComponent" :value="CompA"> A
+      </label>
+      <label  @click="activeComponent = CompB">
+        <input type="radio" v-model="activeComponent" :value="CompB"> B
+      </label>
+      <Transition name="fade" mode="out-in">
+        <component :is="activeComponent"></component>
+      </Transition> -->
+
       <Content
         model="page"
         :content="content"
         :api-key="BUILDER_PUBLIC_API_KEY"
         :customComponents="REGISTERED_COMPONENTS"
+        :context="{ myFunction: handleButtonClick }"
+        :data="{ products: products }"
       />
     </div>
     <div v-else>Content not Found</div>
@@ -19,11 +32,43 @@
 </template>
 
 <script setup>
-import { Content, fetchOneEntry, isPreviewing, getBuilderSearchParams } from '@builder.io/sdk-vue';
+import { Content, register, fetchOneEntry, isPreviewing, getBuilderSearchParams } from '@builder.io/sdk-vue';
 
 import HelloWorldComponent from './components/HelloWorld.vue';
 import Tabs from './components/Tabs.vue';
+import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
+import Megamenu from './components/Megamenu.vue';
 
+import CompA from './components/CompA.vue';
+import CompB from './components/CompB.vue';
+import ProductCard from './components/ProductCard.vue';
+
+let products = [
+        {
+          id: 1,
+          name: "Laptop",
+          price: 999.99,
+          description: "A high-performance laptop for all your needs."
+        },
+        {
+          id: 2,
+          name: "Smartphone",
+          price: 599.99,
+          description: "A smartphone with the latest features and technology."
+        },
+        {
+          id: 3,
+          name: "Headphones",
+          price: 199.99,
+          description: "Noise-cancelling headphones for an immersive experience."
+        }
+        ];
+
+// Method to be passed to the Content component
+function handleButtonClick() {
+  alert('Hi! I am a custom function! 🎉');
+}
 
 const defaultTab = {
   '@type': '@builder.io/sdk:Element',
@@ -69,9 +114,37 @@ const defaultElement = {
   },
 };
 
+register('insertMenu', {
+  name: 'Nav Specifics',
+  items: [
+    { name: 'Header' },
+    { name: 'Footer' },
+    { name: 'Megamenu' },
+  ],
+})
+
+register("editor.settings", {
+  strictMode: true, // optional
+  designTokens: {
+    colors: [
+      { name: "Red", value: "rgba(255, 0, 0)" },
+      { name: "Builder Blue", value: "rgba(93, 150, 255, 1)" },
+    ],
+    spacing: [
+      { name: "Large", value: "var(--space-large, 20px)" },
+      { name: "Small", value: "10px" },
+      { name: "Tiny", value: "5px" },
+    ],
+    fontFamily: [
+      { name: 'Serif', value: 'Times, serif' },
+      { name: 'Sans serif', value: 'Roboto, sans-serif' }
+    ]
+  },
+});
+
 // Register your Builder components
-const REGISTERED_COMPONENTS = [
-  {
+const REGISTERED_COMPONENTS = [ 
+{
     component: HelloWorldComponent,
     name: 'MyFunComponent',
     canHaveChildren: true,
@@ -82,6 +155,59 @@ const REGISTERED_COMPONENTS = [
         defaultValue: 'World',
       },
     ],
+  },
+  {
+    component: ProductCard,
+    name: 'MyProductCard',
+    canHaveChildren: true,
+    inputs: [
+    {
+      name: 'content',
+      type: 'uiBlocks',
+      hideFromUI: true,
+      defaultValue: [],
+    },
+    ],
+  },
+  {
+    component: Header,
+    name: 'Header',
+    inputs: [
+    {
+      name: 'brandName',
+      type: 'string',
+      required: true,
+      helperText: 'The name of the brand'
+    },
+    {
+      name: 'logo',
+      type: 'file',
+      required: true,
+      helperText: 'The logo of the brand'
+    }
+  ]
+  },
+  {
+    component: Footer,
+    name: 'Footer',
+  },
+  {
+    component: Megamenu,
+    name: 'Megamenu',
+    inputs: [
+    {
+      name: 'brandName',
+      type: 'string',
+      required: true,
+      helperText: 'The name of the brand'
+    },
+    {
+      name: 'logo',
+      type: 'file',
+      required: true,
+      helperText: 'The logo of the brand'
+    }
+  ]
   },
   {
   component: Tabs,
@@ -162,7 +288,7 @@ const REGISTERED_COMPONENTS = [
       type: 'uiStyle',
       helperText: 'CSS styles for the active tab',
       defaultValue: {
-        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        backgroundColor: 'rgba(0, 0, 0, 1)',
       },
     },
     {
@@ -214,3 +340,14 @@ const { data: content } = await useAsyncData('builderData', () =>
   })
 );
 </script>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
