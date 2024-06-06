@@ -8,10 +8,11 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@nuxt/image": "^1.7.0",
     "nuxt": "^3.11.2"
   },
   "dependencies": {
-    "@builder.io/sdk-vue": "1.0.26",
+    "@builder.io/sdk-vue": "^1.0.28",
     "axios": "^1.6.8"
   }
 }

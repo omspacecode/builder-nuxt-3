@@ -1,4 +1,37 @@
 <template>
+    <div class="my-4">
+      <!-- NEED ADD BLOCK FOR NAMED SLOTS WITH DEFAULT CONTENT -->
+      <slot name="image">
+        <!-- ADD BLOCK TO OVERRIDE DEFAULT IMAGE AND DRAG & DROP ANYTHING IN HERE -->
+        <Blocks
+          class="mt-4"
+          :parent="props.builderBlock?.id"
+          :path="`component.options.content`"
+          :blocks="props.content"
+        />
+
+        <NuxtImg
+          :src="image"
+          alt="product image"
+          class="p-8 rounded-t-lg"
+        />
+      </slot>
+    </div>
+</template>
+
+<script setup>
+import { Blocks } from '@builder.io/sdk-vue';
+  
+  const props = defineProps({
+    builderBlock: Object,
+    content: Array,
+    image: String,
+    //imageUrl: String,
+  });
+</script>
+
+
+<!-- <template>
     <div class="builder-card">
       <div class="builder-card-content">
         <slot name="image">
@@ -46,4 +79,4 @@
     padding: 15px;
   }
   </style>
-  
+   -->

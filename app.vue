@@ -8,16 +8,6 @@
         {{ content?.data?.title || 'Unpublished' }}
       </div>
 
-      <!-- <label @click="activeComponent = CompA">
-        <input type="radio" v-model="activeComponent" :value="CompA"> A
-      </label>
-      <label  @click="activeComponent = CompB">
-        <input type="radio" v-model="activeComponent" :value="CompB"> B
-      </label>
-      <Transition name="fade" mode="out-in">
-        <component :is="activeComponent"></component>
-      </Transition> -->
-
       <Content
         model="page"
         :content="content"
@@ -43,6 +33,9 @@ import Megamenu from './components/Megamenu.vue';
 import CompA from './components/CompA.vue';
 import CompB from './components/CompB.vue';
 import ProductCard from './components/ProductCard.vue';
+//import ProductVCard from './components/ProductVCard.vue';
+
+
 
 let products = [
         {
@@ -161,6 +154,12 @@ const REGISTERED_COMPONENTS = [
     name: 'MyProductCard',
     canHaveChildren: true,
     inputs: [
+    {
+      name: 'image',
+      type: 'file',
+      defaultValue: 'https://flowbite.com/docs/images/products/apple-watch.png',
+      friendlyName: 'Image URL',
+    },
     {
       name: 'content',
       type: 'uiBlocks',
