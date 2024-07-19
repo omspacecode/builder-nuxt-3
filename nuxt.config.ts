@@ -4,4 +4,5 @@ export default defineNuxtConfig({
   image: {
     // Options
   },
+  components: true, // Auto-import components
 });

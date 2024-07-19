@@ -34,7 +34,7 @@ import CompA from './components/CompA.vue';
 import CompB from './components/CompB.vue';
 import ProductCard from './components/ProductCard.vue';
 //import ProductVCard from './components/ProductVCard.vue';
-
+import SuperProductCard from './components/SuperProductCard.vue';
 
 
 let products = [
@@ -107,6 +107,54 @@ const defaultElement = {
   },
 };
 
+const defaultProductImage = {
+  '@type': '@builder.io/sdk:Element',
+  responsiveStyles: {
+    large: {
+      width: '100%',
+      height: 'auto',
+    },
+  },
+  component: {
+    name: 'Image',
+    options: {
+      image: 'https://via.placeholder.com/300', // Default image URL
+    },
+  },
+};
+
+const defaultTextElement = {
+  '@type': '@builder.io/sdk:Element',
+  responsiveStyles: {
+    large: {
+      margin: '0',
+      padding: '0',
+      textAlign: 'center',
+    },
+  },
+  component: {
+    name: 'Text',
+    options: {
+      text: 'Default text',
+    },
+  },
+};
+
+const defaultHelloWorldElement = {
+  '@type': '@builder.io/sdk:Element',
+  responsiveStyles: {
+    large: {
+      margin: '0',
+      padding: '0',
+      textAlign: 'center',
+    },
+  },
+  component: {
+    name: 'MyFunComponent',
+  },
+};
+
+
 register('insertMenu', {
   name: 'Nav Specifics',
   items: [
@@ -116,27 +164,88 @@ register('insertMenu', {
   ],
 })
 
-register("editor.settings", {
-  strictMode: true, // optional
-  designTokens: {
-    colors: [
-      { name: "Red", value: "rgba(255, 0, 0)" },
-      { name: "Builder Blue", value: "rgba(93, 150, 255, 1)" },
-    ],
-    spacing: [
-      { name: "Large", value: "var(--space-large, 20px)" },
-      { name: "Small", value: "10px" },
-      { name: "Tiny", value: "5px" },
-    ],
-    fontFamily: [
-      { name: 'Serif', value: 'Times, serif' },
-      { name: 'Sans serif', value: 'Roboto, sans-serif' }
-    ]
-  },
-});
+// register("editor.settings", {
+//   strictMode: true, // optional
+//   designTokens: {
+//     colors: [
+//       { name: "Red", value: "rgba(255, 0, 0)" },
+//       { name: "Builder Blue", value: "rgba(93, 150, 255, 1)" },
+//     ],
+//     spacing: [
+//       { name: "Large", value: "var(--space-large, 20px)" },
+//       { name: "Small", value: "10px" },
+//       { name: "Tiny", value: "5px" },
+//     ],
+//     fontFamily: [
+//       { name: 'Serif', value: 'Times, serif' },
+//       { name: 'Sans serif', value: 'Roboto, sans-serif' }
+//     ]
+//   },
+// });
 
 // Register your Builder components
 const REGISTERED_COMPONENTS = [ 
+{
+  component: SuperProductCard,
+  name: 'SuperProductCard',
+  canHaveChildren: true,
+  inputs: [
+    {
+      name: 'productImage',
+      type: 'uiBlocks',
+      hideFromUI: true,
+      defaultValue: [defaultProductImage],
+    },
+    {
+      name: 'productName',
+      type: 'uiBlocks',
+      hideFromUI: true,
+      defaultValue: [defaultHelloWorldElement],
+    },
+    {
+      name: 'productDescription',
+      type: 'uiBlocks',
+      hideFromUI: true,
+      defaultValue: [
+        {
+          ...defaultTextElement,
+          component: {
+            name: 'Text',
+            options: {
+              text: 'Product Description',
+            },
+          },
+        },
+      ],
+    },
+    {
+      name: 'productPrice',
+      type: 'uiBlocks',
+      hideFromUI: true,
+      defaultValue: [
+        {
+          ...defaultTextElement,
+          component: {
+            name: 'Text',
+            options: {
+              text: '$0.00',
+            },
+          },
+        },
+      ],
+    },
+  ],
+},
+{
+  component: ProductCard,
+  name: 'ProductCard',
+  inputs: [
+    { name: 'productTitle', type: 'string', required: true, defaultValue: 'Product Title' },
+    { name: 'productPrice', type: 'string', required: true, defaultValue: '$0.00' },
+    { name: 'productRef', type: 'reference', required: true, defaultValue: 'product-ref' },
+    { name: 'productImage', type: 'file', allowedFileTypes: ['jpeg', 'jpg', 'png'], required: true, defaultValue: 'https://via.placeholder.com/150' },
+  ],
+},
 {
     component: HelloWorldComponent,
     name: 'MyFunComponent',
@@ -151,21 +260,28 @@ const REGISTERED_COMPONENTS = [
   },
   {
     component: ProductCard,
-    name: 'MyProductCard',
+    name: "My Product Card",
+    description: "custom product card for testing",
+    models: ["symbol", "page"],
+    noWrap: true,
     canHaveChildren: true,
+    //props
     inputs: [
-    {
-      name: 'image',
-      type: 'file',
-      defaultValue: 'https://flowbite.com/docs/images/products/apple-watch.png',
-      friendlyName: 'Image URL',
-    },
-    {
-      name: 'content',
-      type: 'uiBlocks',
-      hideFromUI: true,
-      defaultValue: [],
-    },
+      {
+        name: "title",
+        type: "string",
+        defaultValue: "product title",
+      },
+      {
+        name: "rating",
+        type: "number",
+        defaultValue: 5,
+      },
+      {
+        name: "price",
+        type: "number",
+        defaultValue: 150,
+      },
     ],
   },
   {
